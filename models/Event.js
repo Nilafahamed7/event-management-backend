@@ -44,3 +44,4 @@ const Event = mongoose.model('Event', eventSchema);
 
 export default Event;
 
+

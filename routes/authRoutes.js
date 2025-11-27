@@ -48,6 +48,7 @@ router.post('/signup', async (req, res) => {
       });
     }
   } catch (error) {
+    console.error('Signup Error:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -77,6 +78,7 @@ router.post('/login', async (req, res) => {
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
+    console.error('Login Error:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -86,14 +88,14 @@ router.post('/login', async (req, res) => {
 router.get('/me', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
-    
+
     if (!token) {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select('-password');
-    
+
     if (user) {
       res.json({
         _id: user._id,
@@ -104,9 +106,11 @@ router.get('/me', async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
+    console.error('Auth Check Error:', error);
     res.status(401).json({ message: 'Not authorized' });
   }
 });
 
 export default router;
+
 
